@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="biru-pastel">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LESS FOMO - Wish List & Budget Planner</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* BASE TEMA: BIRU PASTEL (DEFAULT) */
+        :root {
+            --bg-color: #f0f7ff;
+            --card-bg: #ffffff;
+            --card-border: #d0e3ff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-purple: #3b82f6;
+            --accent-green: #0ea5e9;
+            --accent-green-bg: rgba(14, 165, 233, 0.12);
+            --accent-hover: #2563eb;
+            --yellow-accent: #f59e0b;
+            --nav-bg: #ffffff;
+            --bar-empty: #e2e8f0;
+            --app-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.08);
+        }
+
+        /* 1. HIJAU PASTEL */
+        [data-theme="hijau-pastel"] {
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --card-border: #bbf7d0;
+            --text-main: #14532d;
+            --text-sub: #475569;
+            --accent-purple: #10b981;
+            --accent-green: #059669;
+            --accent-green-bg: rgba(16, 185, 129, 0.12);
+            --bar-empty: #e2e8f0;
+            --app-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.08);
+        }
+
+        /* 2. KUNING PASTEL */
+        [data-theme="kuning-pastel"] {
+            --bg-color: #fefce8;
+            --card-bg: #ffffff;
+            --card-border: #fef08a;
+            --text-main: #713f12;
+            --text-sub: #78716c;
+            --accent-purple: #eab308;
+            --accent-green: #d97706;
+            --accent-green-bg: rgba(234, 179, 8, 0.15);
+            --bar-empty: #f3f4f6;
+            --app-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.08);
+        }
+
+        /* 3. BIRU DARK */
+        [data-theme="biru-dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-purple: #38bdf8;
+            --accent-green: #818cf8;
+            --accent-green-bg: rgba(56, 189, 248, 0.15);
+            --nav-bg: #0f172a;
+            --bar-empty: #334155;
+            --app-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 4. GRADASI PASTEL */
+        [data-theme="gradasi-pastel"] {
+            --bg-color: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 50%, #f0fdf4 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: #fbcfe8;
+            --text-main: #374151;
+            --text-sub: #6b7280;
+            --accent-purple: #ec4899;
+            --accent-green: #8b5cf6;
+            --accent-green-bg: rgba(236, 72, 153, 0.12);
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --bar-empty: #e5e7eb;
+            --app-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.1);
+        }
+
+        /* 5. GRADASI DARK */
+        [data-theme="gradasi-dark"] {
+            --bg-color: linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #064e3b 100%);
+            --card-bg: rgba(31, 41, 55, 0.85);
+            --card-border: #374151;
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+            --accent-purple: #a855f7;
+            --accent-green: #34d399;
+            --accent-green-bg: rgba(168, 85, 247, 0.2);
+            --nav-bg: rgba(17, 24, 39, 0.95);
+            --bar-empty: #374151;
+            --app-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: var(--bg-color);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px 16px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            color: var(--accent-purple);
+        }
+
+        .theme-selector {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .hero-section {
+            margin-bottom: 24px;
+        }
+
+        .subtitle-small {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .main-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .hero-desc {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--app-shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .chart-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .circle-progress {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle-progress svg {
+            width: 80px;
+            height: 80px;
+            transform: rotate(-90deg);
+        }
+
+        .circle-progress circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .circle-bg { stroke: var(--bar-empty); }
+        .circle-val {
+            stroke: var(--accent-green);
+            stroke-dasharray: 220;
+            stroke-dashoffset: 220;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .circle-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .circle-text .pct { font-size: 1.1rem; font-weight: 800; }
+        .circle-text .lbl { font-size: 0.65rem; color: var(--text-sub); }
+
+        .stats-info div { margin-bottom: 6px; }
+        .stats-info .main-stat { font-weight: 700; font-size: 1rem; }
+        .stats-info .sub-stat { font-size: 0.85rem; color: var(--text-sub); }
+
+        .bar-chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 120px;
+            padding-top: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .bar-val-text { font-size: 0.7rem; font-weight: 700; color: var(--text-sub); }
+        .bar-track {
+            width: 28px;
+            height: 80px;
+            background-color: var(--bar-empty);
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, var(--accent-purple), var(--accent-green));
+            border-radius: 6px;
+            transition: height 0.4s ease;
+        }
+
+        .bar-label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
+        .chart-footer-note { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; margin-top: 12px; }
+
+        .day-selector {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        .day-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-sub);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .day-btn.active {
+            background: var(--accent-green);
+            color: #fff;
+            border-color: var(--accent-green);
+        }
+
+        .mission-box {
+            background: var(--accent-green-bg);
+            border-left: 4px solid var(--accent-purple);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mission-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .mission-desc { font-size: 0.88rem; color: var(--text-main); font-weight: 600; }
+
+        .task-card {
+            background: rgba(0,0,0,0.015);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .task-card.completed {
+            border-color: var(--accent-green);
+            background: var(--accent-green-bg);
+        }
+
+        .checkbox-custom {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--text-sub);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .task-card.completed .checkbox-custom {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #fff;
+        }
+
+        .task-content h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .task-content p { font-size: 0.8rem; color: var(--text-sub); line-height: 1.35; }
+
+        .action-btns { display: flex; gap: 10px; margin-top: 16px; }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary { background: var(--accent-purple); color: #fff; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); }
+
+        .survey-q { margin-bottom: 18px; }
+        .survey-q label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 8px; }
+        .survey-q select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .pie-result-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .pie-chart {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-purple) 0% 0%, var(--bar-empty) 0% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .pie-chart-inner {
+            width: 95px;
+            height: 95px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pie-pct { font-size: 1.4rem; font-weight: 800; }
+        .pie-level { font-size: 0.75rem; font-weight: 700; color: var(--accent-green); }
+
+        .result-advice-box {
+            background: var(--accent-green-bg);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: left;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .quote-box { text-align: center; padding: 20px 10px; }
+        .quote-text { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 16px; font-style: italic; }
+        .quote-actions { display: flex; justify-content: center; gap: 8px; }
+        .quote-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .reminder-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .reminder-info h5 { font-size: 0.9rem; font-weight: 700; }
+        .reminder-info p { font-size: 0.78rem; color: var(--text-sub); }
+
+        .add-reminder-form { display: flex; gap: 8px; margin-top: 14px; }
+        .add-reminder-form input[type="text"] {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+        }
+
+        .add-reminder-form input[type="time"] {
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+        }
+
+        /* GAME STYLING */
+        .game-canvas {
+            width: 100%;
+            height: 220px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-top: 10px;
+            touch-action: none;
+            cursor: pointer;
+        }
+
+        .sound-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sound-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .sound-btn.active {
+            border-color: var(--accent-green);
+            background: var(--accent-green-bg);
+            color: var(--accent-purple);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--nav-bg);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 20%;
+        }
+
+        .nav-item.active { color: var(--accent-purple); }
+        .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* BUKU PANDUAN STYLING RAPI */
+        .accordion-item {
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+
+        .accordion-header {
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .accordion-body {
+            padding: 16px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+            display: none;
+            border-top: 1px solid var(--card-border);
+            background: rgba(0,0,0,0.01);
+        }
+
+        .accordion-item.active .accordion-body { display: block; }
+
+        .guide-section-title {
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+        }
+
+        .guide-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 6px;
+        }
+
+        .guide-list li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .guide-list li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            color: var(--accent-purple);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- TOP HEADER -->
+        <div class="top-header">
+            <div class="brand-logo">
+                <span>☁️</span> LESS FOMO
+            </div>
+            <!-- PILIHAN TEMA DENGAN NAMA BARU DALAM KURUNG -->
+            <select class="theme-selector" id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="biru-pastel">Soft Cyan / Ice Blue</option>
+                <option value="hijau-pastel">Soft Sage & Mint</option>
+                <option value="kuning-pastel">Soft Sunburst Butter</option>
+                <option value="biru-dark">Deep Navy Midnight Blue</option>
+                <option value="gradasi-pastel">Soft Sunset Gradient Lavender-Pink</option>
+                <option value="gradasi-dark">Deep Neon Cyan Gradient</option>
+            </select>
+        </div>
+
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <div class="subtitle-small">Jeda dulu, pilih yang berarti</div>
+            <h1 class="main-title">Is it what you want, or just FOMO?</h1>
+            <p class="hero-desc">Tidak perlu sempurna. Fokus pada langkah kecil yang realistis untuk mengambil kembali kendali atas waktu dan pilihanmu.</p>
+        </div>
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <div id="tab-dashboard" class="tab-content">
+            <div class="card">
+                <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:8px;">🌱 Pilih Keinginan dengan Sadar</h2>
+                <p style="font-size:.9rem;color:var(--text-sub);line-height:1.6;">LESS FOMO membantumu membedakan keinginan pribadi dan dorongan ikut tren. Catat target per tahun, tentukan budget, lalu susun prioritas sebelum membeli.</p>
+                <button class="btn btn-primary" style="width:100%;margin-top:16px;" onclick="switchTab('wishlist')">Buka Wish List ✨</button>
+            </div>
+            <div class="card">
+                <h3 style="font-size:1rem;font-weight:800;margin-bottom:8px;">Cara menggunakan</h3>
+                <ul class="guide-list"><li>Tulis wish list pribadi dan tahun targetnya.</li><li>Centang jika keinginan sudah tercapai.</li><li>Pilih item dari daftar umum dan masukkan budget.</li><li>Buka keranjang untuk melihat total biaya serta skala prioritas.</li></ul>
+            </div>
+            <div class="card">
+                <h3 style="font-size:1rem;font-weight:800;margin-bottom:12px;">📖 Panduan Memahami FOMO</h3>
+                <div class="accordion-item" onclick="toggleAccordion(this)"><div class="accordion-header">1. Apa Itu FOMO? <span>+</span></div><div class="accordion-body"><p>FOMO (<i>Fear of Missing Out</i>) adalah perasaan cemas atau takut tertinggal ketika melihat orang lain menikmati tren atau pengalaman tertentu. Media sosial bisa membuat kita hanya melihat bagian terbaik kehidupan orang lain.</p></div></div>
+                <div class="accordion-item" onclick="toggleAccordion(this)"><div class="accordion-header">2. Dampak FOMO <span>+</span></div><div class="accordion-body"><ul class="guide-list"><li>Pengeluaran impulsif untuk barang yang sedang tren.</li><li>Sering membandingkan diri dengan orang lain.</li><li>Waktu dan perhatian teralihkan dari kebutuhan sendiri.</li></ul></div></div>
+                <div class="accordion-item" onclick="toggleAccordion(this)"><div class="accordion-header">3. Cara Mengelola FOMO <span>+</span></div><div class="accordion-body"><ul class="guide-list"><li>Beri jeda sebelum membeli sesuatu.</li><li>Periksa kebutuhan dan budget terlebih dahulu.</li><li>Ingat bahwa kamu tidak harus mengikuti semua tren.</li></ul></div></div>
+            </div>
+        </div>
+
+        <!-- ================= TAB: WISH LIST ================= -->
+        <div id="tab-wishlist" class="tab-content">
+            <div class="card">
+                <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">✨ Wish List per Tahun</h3>
+                <p style="font-size:.85rem;color:var(--text-sub);margin-bottom:14px;">Catat keinginanmu, pilih tahun target, lalu centang jika sudah tercapai.</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                    <input id="wishYear" type="number" min="2020" max="2100" value="2026" aria-label="Tahun target" style="flex:1;min-width:100px;padding:10px;border:1px solid var(--card-border);border-radius:10px;background:var(--card-bg);color:var(--text-main);">
+                    <input id="wishTitle" type="text" placeholder="Keinginan yang ingin dicapai..." style="flex:3;min-width:180px;padding:10px;border:1px solid var(--card-border);border-radius:10px;background:var(--card-bg);color:var(--text-main);">
+                    <button class="btn btn-primary" style="flex:initial;padding:10px 16px;" onclick="addPersonalWish()">Tambah</button>
+                </div>
+                <div id="personalWishList"></div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">🛍️ Keinginan yang Umum Dimiliki</h3>
+                <p style="font-size:.85rem;color:var(--text-sub);margin-bottom:14px;">Pilih item yang kamu inginkan dan isi perkiraan budget. Harga hanya perkiraan—silakan sesuaikan dengan kebutuhanmu.</p>
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+                    <label for="totalBudget" style="font-size:.88rem;font-weight:700;">Total budget:</label>
+                    <input id="totalBudget" type="number" min="0" placeholder="Contoh: 1000000" oninput="saveBudget();renderCommonWishes();" style="flex:1;min-width:150px;padding:10px;border:1px solid var(--card-border);border-radius:10px;background:var(--card-bg);color:var(--text-main);">
+                    <span style="font-size:.8rem;color:var(--text-sub);">Rupiah (Rp)</span>
+                </div>
+                <div id="budgetSummary" style="font-size:.85rem;font-weight:700;margin-bottom:12px;"></div>
+                <div id="commonWishList"></div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: SURVEI & HASIL DIAGRAM ================= -->
+        <div id="tab-cek" class="tab-content">
+            <div class="card">
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 14px;">📊 Tes Seberapa FOMO Kamu</h3>
+                <form id="surveyForm">
+                    <div class="survey-q">
+                        <label>1. Seberapa sering kamu mengecek medsos langsung saat bangun tidur?</label>
+                        <select id="q1">
+                            <option value="1">Jarang / Hampir tidak pernah</option>
+                            <option value="2">Kadang-kadang</option>
+                            <option value="3">Sangat sering / Selalu</option>
+                        </select>
+                    </div>
+                    <div class="survey-q">
+                        <label>2. Merasa cemas jika tidak tahu tren terbaru yang lagi viral?</label>
+                        <select id="q2">
+                            <option value="1">Tidak cemas sama sekali</option>
+                            <option value="2">Agak cemas</option>
+                            <option value="3">Sangat cemas & merasa tertinggal</option>
+                        </select>
+                    </div>
+                    <div class="survey-q">
+                        <label>3. Membeli barang/makanan populer hanya karena ramai di internet?</label>
+                        <select id="q3">
+                            <option value="1">Sangat jarang / Sesuai kebutuhan</option>
+                            <option value="2">Pernah beberapa kali</option>
+                            <option value="3">Sering ikut-ikutan</option>
+                        </select>
+                    </div>
+                    <div class="survey-q">
+                        <label>4. Merasa iri melihat unggahan kegiatan teman di medsos?</label>
+                        <select id="q4">
+                            <option value="1">Hampir tidak pernah</option>
+                            <option value="2">Kadang-kadang</option>
+                            <option value="3">Sangat sering merasa iri</option>
+                        </select>
+                    </div>
+                    <div class="survey-q">
+                        <label>5. Kesulitan menikmati momen tanpa mengunggahnya ke medsos?</label>
+                        <select id="q5">
+                            <option value="1">Bisa menikmati momen tanpa hp</option>
+                            <option value="2">Kadang harus dokumentasi</option>
+                            <option value="3">Wajib upload dulu baru puas</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="calculateFOMO()">Hitung Hasil FOMO</button>
+                </form>
+
+                <div id="surveyResultSection" style="display: none; margin-top: 24px;">
+                    <div class="pie-result-container">
+                        <div class="pie-chart" id="fomoPieChart">
+                            <div class="pie-chart-inner">
+                                <div class="pie-pct" id="piePctText">0%</div>
+                                <div class="pie-level" id="pieLevelText">FOMO</div>
+                            </div>
+                        </div>
+                        <h4 id="resultHeading" style="font-size: 1.1rem; font-weight: 800; margin-bottom: 6px;">Skor FOMO Kamu</h4>
+                        <div class="result-advice-box" id="resultAdvice"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: QUOTES & PENGINGAT ================= -->
+        <div id="tab-pengingat" class="tab-content">
+            <div style="text-align: center; margin-bottom: 16px;">
+                <h2 style="font-size: 1.4rem; font-weight: 800;">A gentle reminder for you.</h2>
+                <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">Ganti kutipan kapan pun kamu butuh pengingat kecil, simpan favoritmu, dan atur pengingat tugas harian.</p>
+            </div>
+
+            <div class="card quote-box">
+                <div class="quote-text" id="quoteDisplay">"Kamu tidak harus memiliki semua yang sedang ramai dibicarakan."</div>
+                <div class="quote-actions">
+                    <button class="quote-btn" onclick="saveFavoriteQuote()">❤️ Simpan</button>
+                    <button class="quote-btn" onclick="copyQuote()">📋 Salin</button>
+                    <button class="quote-btn" onclick="nextQuote()">Ganti kutipan ↺</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-sub);">Pengingat harian</div>
+                        <h3 style="font-size: 1rem; font-weight: 800;">Atur Jadwal Pengingat</h3>
+                    </div>
+                    <span style="font-size: 1.5rem;">⏰</span>
+                </div>
+
+                <div id="reminderListContainer"></div>
+
+                <div class="add-reminder-form">
+                    <input type="time" id="newReminderTime" value="20:00">
+                    <input type="text" id="newReminderLabel" placeholder="Nama pengingat (mis: Waktu Rehat)">
+                    <button class="btn btn-primary" style="padding: 8px 12px; flex: initial;" onclick="addReminder()">+</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px;">Kutipan favorit</h3>
+                <div id="favoriteQuotesContainer"></div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: GAME & AUDIO PENENANG ================= -->
+        <div id="tab-game" class="tab-content">
+            <!-- GAME 1: MINDFUL CATCH -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <h3 style="font-size: 1rem; font-weight: 800;">🎮 Game 1: Mindful Catch</h3>
+                    <div style="font-size: 0.85rem; font-weight: 700;">
+                        Nyawa: <span id="catchLives">❤️❤️❤️❤️❤️</span> | Skor: <span id="catchScore">0</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 10px;">
+                    Tangkap ⭐ **Bintang Biru (+10 skor)**. Jangan sentuh 🔴 **Medsos Merah (Nyawa -1)**!
+                </p>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button class="btn btn-primary" style="padding: 6px;" onclick="startCatchGame()">Main Catch 🚀</button>
+                </div>
+
+                <canvas id="catchCanvas" class="game-canvas"></canvas>
+            </div>
+
+            <!-- GAME 2: ANTI-FOMO RUNNER -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <h3 style="font-size: 1rem; font-weight: 800;">🏃 Game 2: Anti-FOMO Runner</h3>
+                    <div style="font-size: 0.85rem; font-weight: 700;">
+                        Nyawa: <span id="runnerLives">❤️❤️❤️❤️❤️</span> | Skor: <span id="runnerScore">0</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 10px;">
+                    Lompati rintangan barang FOMO (📱,🛍️,🍔). **Ketuk Layar / Spacebar** untuk Melompat!
+                </p>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button class="btn btn-primary" style="padding: 6px;" onclick="startRunnerGame()">Main Runner 🚀</button>
+                </div>
+
+                <canvas id="runnerCanvas" class="game-canvas"></canvas>
+            </div>
+
+            <!-- 6 SUARA AUDIO RELAKSASI -->
+            <div class="card">
+                <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px;">🎧 6 Suara Rileksasi & Penenang</h3>
+                <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 12px;">Pilih ketenangan alami untuk melepas stres dan FOMO:</p>
+                
+                <div class="sound-grid">
+                    <button class="sound-btn" id="s-birds" onclick="playAudio('birds')">🐦 Kicauan Burung</button>
+                    <button class="sound-btn" id="s-waves" onclick="playAudio('waves')">🌊 Ombak Laut</button>
+                    <button class="sound-btn" id="s-wind" onclick="playAudio('wind')">🍃 Angin Sungai</button>
+                    <button class="sound-btn" id="s-crickets" onclick="playAudio('crickets')">🦗 Hutan Jangkrik</button>
+                    <button class="sound-btn" id="s-egypt" onclick="playAudio('egypt')">🪕 Musik Mesir</button>
+                    <button class="sound-btn" id="s-bell" onclick="playAudio('bell')">🔔 Lonceng Zen</button>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px; color: #ef4444;" onclick="stopAudio()">⏹️ Matikan Semua Suara</button>
+            </div>
+        </div>
+
+        <!-- ================= NAVBAR BOTTOM ================= -->
+        <nav class="bottom-nav">
+            <button class="nav-item" onclick="switchTab('cek')">
+                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                <span>Cek</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('wishlist')">
+                <svg viewBox="0 0 24 24"><path d="M12 21s-8-4.8-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.2-8 11-8 11z"/></svg>
+                <span>Wish List</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('pengingat')">
+                <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                <span>Pengingat</span>
+            </button>
+            <button class="nav-item active" onclick="switchTab('dashboard')">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="switchTab('game')">
+                <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                <span>Fun Games</span>
+            </button>
+        </nav>
+    </div>
+
+    <button id="cartFab" onclick="toggleCart(true)" aria-label="Buka keranjang" style="position:fixed;right:20px;bottom:86px;z-index:150;border:0;border-radius:50%;width:58px;height:58px;background:var(--accent-purple);color:white;font-size:1.35rem;box-shadow:0 8px 24px rgba(0,0,0,.2);cursor:pointer;">🛒<span id="cartCount" style="position:absolute;right:-3px;top:-3px;background:#ef4444;color:white;border-radius:50%;min-width:22px;height:22px;font-size:.7rem;display:flex;align-items:center;justify-content:center;">0</span></button>
+    <div id="cartOverlay" onclick="if(event.target===this)toggleCart(false)" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:200;padding:20px;align-items:center;justify-content:center;">
+        <div class="card" style="width:100%;max-width:520px;max-height:85vh;overflow:auto;margin:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;"><h3 style="font-size:1.15rem;font-weight:800;">🛒 Keranjang & Skala Prioritas</h3><button onclick="toggleCart(false)" class="btn btn-secondary" style="flex:initial;padding:6px 12px;">Tutup ✕</button></div>
+            <p style="font-size:.84rem;color:var(--text-sub);margin-bottom:12px;">Item diurutkan dari prioritas tertinggi. Kamu bisa mengubah prioritas setiap item di daftar keinginan.</p>
+            <div id="cartContents"></div>
+        </div>
+    </div>
+
+    <script>
+        const quotesData = [
+            "Kamu tidak harus memiliki semua yang sedang ramai dibicarakan.",
+            "Boleh tertarik pada tren, tetap pilih berdasarkan kebutuhanmu.",
+            "Gak semua hal viral harus kamu cobain. Hidup tenang itu juga tren kok!",
+            "Dompet aman, pikiran tenang. JOMO (Joy of Missing Out) itu nikmat banget!",
+            "Social media cuma tempat pamer highlight reel, bukan realita 24/7 mereka.",
+            "Nggak usah buru-buru, kamu nggak ketinggalan apa-apa kok. Jalani ritmemu sendiri.",
+            "Istirahat dari medsos sebentar gak akan bikin kamu kehilangan dunia.",
+            "Beli barang karena butuh, bukan karena pengen keliatan keren di story.",
+            "Fokus ke versi terbaik dirimu, bukan sibuk ngeliatin pencapaian orang lain.",
+            "Rehat sejenak dari scroll medsos. Dunia nyata di sekitarmu jauh lebih seru!",
+            "Punya sedikit barang tapi kepake semua jauh lebih adem daripada ikutan tren mulu.",
+            "Belajar bilang 'nggak dulu' itu bentuk paling keren dari self-love.",
+            "Kebahagiaanmu itu kamu yang nentukan, bukan likes atau komentar netizen.",
+            "Gak usah merasa tertinggal, tiap orang punya garis start dan finish masing-masing.",
+            "Lagi gak ngikutin tren yang viral? Selamat, kamu punya pendirian kuat!"
+        ];
+
+        let favoriteQuotes = JSON.parse(localStorage.getItem('lessfomo_quotes')) || ["Kamu tidak harus memiliki semua yang sedang ramai dibicarakan."];
+        let reminders = JSON.parse(localStorage.getItem('lessfomo_reminders')) || [{ id: 1, time: "20:00", label: "Waktu Rehat", active: true }];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderReminders();
+            renderFavoriteQuotes();
+            const budgetEl=document.getElementById('totalBudget'); if(budgetEl) budgetEl.value=totalBudget||'';
+            renderPersonalWishes(); renderCommonWishes(); renderCartCount();
+            checkRemindersLoop();
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            const activeButton = document.querySelector(`.nav-item[onclick=\"switchTab('${tabId}')\"]`);
+            if(activeButton) activeButton.classList.add('active');
+
+            if(tabId === 'wishlist') { renderPersonalWishes(); renderCommonWishes(); }
+            if(tabId === 'game') {
+                setTimeout(() => { initCatchCanvas(); initRunnerCanvas(); }, 100);
+            }
+        }
+
+        function changeTheme(themeName) { document.documentElement.setAttribute('data-theme', themeName); }
+
+        function toggleAccordion(element) { element.classList.toggle('active'); element.querySelector('.accordion-header span').innerText = element.classList.contains('active') ? '−' : '+'; }
+
+        // WISH LIST DAN BUDGET — tersimpan di browser menggunakan localStorage
+        const commonWishes = [
+            {id:'phone', name:'HP / smartphone', category:'Teknologi', price:3500000},
+            {id:'laptop', name:'Laptop / tablet', category:'Teknologi', price:6000000},
+            {id:'earbuds', name:'Earphone / earbuds', category:'Teknologi', price:300000},
+            {id:'clothes', name:'Pakaian dan sepatu', category:'Fashion', price:500000},
+            {id:'bag', name:'Tas sehari-hari', category:'Fashion', price:250000},
+            {id:'skincare', name:'Skincare / perawatan diri', category:'Perawatan diri', price:200000},
+            {id:'makeup', name:'Makeup', category:'Perawatan diri', price:250000},
+            {id:'trip', name:'Liburan / jalan-jalan', category:'Pengalaman', price:1000000},
+            {id:'concert', name:'Konser / fan meeting', category:'Hiburan', price:800000},
+            {id:'course', name:'Kursus atau kelas keterampilan', category:'Pengembangan diri', price:400000},
+            {id:'books', name:'Buku / alat belajar', category:'Pendidikan', price:150000},
+            {id:'savings', name:'Tabungan untuk masa depan', category:'Keuangan', price:500000},
+            {id:'room', name:'Dekorasi kamar', category:'Lifestyle', price:300000},
+            {id:'camera', name:'Kamera / perlengkapan konten', category:'Hobi', price:2500000}
+        ];
+        let personalWishes = JSON.parse(localStorage.getItem('lessfomo_personal_wishes') || '[]');
+        let selectedWishes = JSON.parse(localStorage.getItem('lessfomo_selected_wishes') || '{}');
+        let totalBudget = Number(localStorage.getItem('lessfomo_budget') || 0);
+
+        function rupiah(value) { return new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(value)||0); }
+        function savePersonalWishes() { localStorage.setItem('lessfomo_personal_wishes',JSON.stringify(personalWishes)); }
+        function addPersonalWish() {
+            const title = document.getElementById('wishTitle').value.trim();
+            const year = parseInt(document.getElementById('wishYear').value,10);
+            if(!title || !year || year < 2020 || year > 2100) { alert('Isi keinginan dan tahun target yang valid dulu, ya.'); return; }
+            personalWishes.push({id:Date.now(),title,year,done:false}); savePersonalWishes();
+            document.getElementById('wishTitle').value=''; renderPersonalWishes();
+        }
+        function togglePersonalWish(id) {
+            const item=personalWishes.find(w=>w.id===id); if(item) item.done=!item.done;
+            savePersonalWishes(); renderPersonalWishes();
+        }
+        function deletePersonalWish(id) { personalWishes=personalWishes.filter(w=>w.id!==id); savePersonalWishes(); renderPersonalWishes(); }
+        function renderPersonalWishes() {
+            const c=document.getElementById('personalWishList'); if(!c)return;
+            if(!personalWishes.length) { c.innerHTML='<p style="font-size:.85rem;color:var(--text-sub);padding:8px 0;">Belum ada wish list. Tambahkan keinginan pertamamu di atas ✨</p>'; return; }
+            const years=[...new Set(personalWishes.map(w=>w.year))].sort((a,b)=>a-b);
+            c.innerHTML=years.map(y=>`<div style="margin-top:12px;"><h4 style="font-size:.95rem;font-weight:800;margin-bottom:8px;">📅 ${y}</h4>${personalWishes.filter(w=>w.year===y).map(w=>`<div class="task-card ${w.done?'completed':''}" style="align-items:center;cursor:default;"><input type="checkbox" ${w.done?'checked':''} onchange="togglePersonalWish(${w.id})" aria-label="Tandai tercapai" style="width:20px;height:20px;accent-color:var(--accent-green);"><div class="task-content" style="flex:1;"><h4 style="${w.done?'text-decoration:line-through;opacity:.7;':''}">${escapeHTML(w.title)}</h4><p>${w.done?'🎉 Sudah tercapai!':'Belum tercapai'}</p></div><button onclick="deletePersonalWish(${w.id})" aria-label="Hapus wish" style="border:0;background:transparent;color:#ef4444;cursor:pointer;font-size:1rem;">✕</button></div>`).join('')}</div>`).join('');
+        }
+        function escapeHTML(value) { return String(value).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+        function saveBudget() { totalBudget=Math.max(0,Number(document.getElementById('totalBudget').value)||0); localStorage.setItem('lessfomo_budget',String(totalBudget)); renderCartCount(); }
+        function toggleCommonWish(id,checked) { if(checked) { if(!selectedWishes[id]) selectedWishes[id]={price:commonWishes.find(w=>w.id===id).price,priority:3}; } else delete selectedWishes[id]; saveSelectedWishes(); renderCommonWishes(); renderCartCount(); }
+        function updateWishPrice(id,value) { if(selectedWishes[id]) selectedWishes[id].price=Math.max(0,Number(value)||0); saveSelectedWishes(); renderBudgetSummary(); renderCartCount(); }
+        function updateWishPriority(id,value) { if(selectedWishes[id]) selectedWishes[id].priority=Number(value); saveSelectedWishes(); }
+        function saveSelectedWishes() { localStorage.setItem('lessfomo_selected_wishes',JSON.stringify(selectedWishes)); }
+        function renderCommonWishes() {
+            const c=document.getElementById('commonWishList'); if(!c)return;
+            const budgetInput=document.getElementById('totalBudget'); if(budgetInput && document.activeElement!==budgetInput) budgetInput.value=totalBudget||'';
+            c.innerHTML=commonWishes.map(w=>{const picked=!!selectedWishes[w.id], price=picked?selectedWishes[w.id].price:w.price, priority=picked?selectedWishes[w.id].priority:3; return `<div class="task-card ${picked?'completed':''}" style="align-items:flex-start;cursor:default;"><input type="checkbox" ${picked?'checked':''} onchange="toggleCommonWish('${w.id}',this.checked)" aria-label="Pilih ${w.name}" style="width:20px;height:20px;margin-top:3px;accent-color:var(--accent-green);"><div class="task-content" style="flex:1;min-width:0;"><h4>${w.name}</h4><p>${w.category} · Perkiraan awal ${rupiah(w.price)}</p>${picked?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px;align-items:center;"><label style="font-size:.78rem;">Budget item</label><input type="number" min="0" value="${price}" onchange="updateWishPrice('${w.id}',this.value);renderCommonWishes();" style="width:125px;padding:7px;border:1px solid var(--card-border);border-radius:8px;background:var(--card-bg);color:var(--text-main);"><label style="font-size:.78rem;">Prioritas</label><select onchange="updateWishPriority('${w.id}',this.value)" style="padding:7px;border:1px solid var(--card-border);border-radius:8px;background:var(--card-bg);color:var(--text-main);"><option value="1" ${priority===1?'selected':''}>1 - Tinggi</option><option value="2" ${priority===2?'selected':''}>2 - Sedang</option><option value="3" ${priority===3?'selected':''}>3 - Rendah</option></select></div>`:''}</div></div>`;}).join('');
+            renderBudgetSummary();
+        }
+        function getSelectedList() { return commonWishes.filter(w=>selectedWishes[w.id]).map(w=>({...w,...selectedWishes[w.id]})).sort((a,b)=>a.priority-b.priority || a.price-b.price); }
+        function renderBudgetSummary() {
+            const el=document.getElementById('budgetSummary'); if(!el)return;
+            const list=getSelectedList(), total=list.reduce((sum,w)=>sum+w.price,0), remaining=totalBudget-total;
+            el.innerHTML=`Dipilih: ${list.length} item · Total: ${rupiah(total)} · ${totalBudget?`Sisa budget: <span style="color:${remaining>=0?'var(--accent-green)':'#ef4444'}">${rupiah(remaining)}</span>`:'Isi total budget untuk melihat sisa dana.'}`;
+        }
+        function renderCartCount() { const count=document.getElementById('cartCount'); if(count)count.textContent=Object.keys(selectedWishes).length; renderBudgetSummary(); }
+        function toggleCart(show) { const overlay=document.getElementById('cartOverlay'); overlay.style.display=show?'flex':'none'; if(show)renderCart(); }
+        function renderCart() {
+            const c=document.getElementById('cartContents'); const list=getSelectedList();
+            if(!list.length) { c.innerHTML='<p style="font-size:.88rem;color:var(--text-sub);">Keranjang masih kosong. Centang keinginan dari daftar di halaman Wish List.</p>'; return; }
+            const total=list.reduce((sum,w)=>sum+w.price,0); let running=0;
+            const rows=list.map((w,i)=>{running+=w.price;const fits=totalBudget>0 && running<=totalBudget;return `<div class="task-card" style="cursor:default;align-items:flex-start;"><div style="font-size:1.15rem;font-weight:800;color:var(--accent-purple);min-width:30px;">${i+1}</div><div class="task-content" style="flex:1;"><h4>${w.name}</h4><p>Prioritas ${w.priority===1?'tinggi':w.priority===2?'sedang':'rendah'} · ${rupiah(w.price)}</p><p style="margin-top:4px;color:${fits?'var(--accent-green)':'#ef4444'};">${totalBudget===0?'Tentukan budget untuk mengecek kecocokan':fits?'Masuk dalam alokasi prioritas sementara':'Melewati alokasi budget sementara'}</p></div></div>`;}).join('');
+            c.innerHTML=`<div style="background:var(--accent-green-bg);border-radius:12px;padding:12px;margin-bottom:12px;"><b>Total pilihan: ${rupiah(total)}</b><br><span style="font-size:.84rem;">Budget: ${totalBudget?rupiah(totalBudget):'belum ditentukan'} · ${totalBudget?`Sisa: ${rupiah(totalBudget-total)}`:'isi budget di halaman Wish List'}</span></div><p style="font-size:.82rem;color:var(--text-sub);margin-bottom:10px;">Urutan berdasarkan prioritas yang kamu pilih; jika prioritas sama, item dengan harga lebih rendah ditampilkan lebih dulu. Ini panduan perencanaan, bukan rekomendasi finansial mutlak.</p>${rows}`;
+        }
+
+        function calculateFOMO() {
+            const score = ['q1','q2','q3','q4','q5'].reduce((a,c)=>a+parseInt(document.getElementById(c).value), 0);
+            const pct = Math.round(((score - 5) / 10) * 100);
+            let lvl = "FOMO Rendah", col = "#10b981", adv = "<strong>Keren banget!</strong> Kamu punya kontrol diri mantap terhadap tren medsos.";
+            if (pct >= 70) { lvl = "FOMO Tinggi"; col = "#ef4444"; adv = "<strong>Perlu Perhatian!</strong> Kamu sangat terpengaruh tren. Yuk mulai susun wish list dan pilih prioritas yang realistis!"; }
+            else if (pct >= 35) { lvl = "FOMO Sedang"; col = "#f59e0b"; adv = "<strong>Waspada!</strong> Terapkan jeda sebelum ikut hal viral."; }
+
+            document.getElementById('surveyResultSection').style.display = 'block';
+            document.getElementById('piePctText').innerText = `${pct}%`;
+            document.getElementById('pieLevelText').innerText = lvl;
+            document.getElementById('pieLevelText').style.color = col;
+            document.getElementById('resultAdvice').innerHTML = adv;
+            document.getElementById('fomoPieChart').style.background = `conic-gradient(${col} 0% ${pct}%, var(--bar-empty) ${pct}% 100%)`;
+        }
+
+        function nextQuote() { document.getElementById('quoteDisplay').innerText = `"${quotesData[Math.floor(Math.random() * quotesData.length)]}"`; }
+        function copyQuote() { navigator.clipboard.writeText(document.getElementById('quoteDisplay').innerText); alert("Kutipan disalin!"); }
+        function saveFavoriteQuote() {
+            const q = document.getElementById('quoteDisplay').innerText;
+            if(!favoriteQuotes.includes(q)) { favoriteQuotes.push(q); localStorage.setItem('lessfomo_quotes', JSON.stringify(favoriteQuotes)); renderFavoriteQuotes(); }
+        }
+        function renderFavoriteQuotes() {
+            const c = document.getElementById('favoriteQuotesContainer');
+            c.innerHTML = favoriteQuotes.map((q,i)=>`<div style="display:flex;justify-space-between;padding:6px 0;font-size:0.85rem;"><span>${q}</span><button onclick="favoriteQuotes.splice(${i},1);localStorage.setItem('lessfomo_quotes',JSON.stringify(favoriteQuotes));renderFavoriteQuotes();" style="background:none;border:none;color:#94a3b8;cursor:pointer;">✕</button></div>`).join('');
+        }
+
+        function renderReminders() {
+            document.getElementById('reminderListContainer').innerHTML = reminders.map(r=>`<div class="reminder-item"><div><h5>${r.time} — ${r.label}</h5></div><button onclick="reminders=reminders.filter(x=>x.id!==${r.id});localStorage.setItem('lessfomo_reminders',JSON.stringify(reminders));renderReminders();" style="background:none;border:none;color:#94a3b8;cursor:pointer;">✕</button></div>`).join('');
+        }
+        function addReminder() {
+            const t = document.getElementById('newReminderTime').value, l = document.getElementById('newReminderLabel').value || "Pengingat";
+            if(t) { reminders.push({id:Date.now(), time:t, label:l, active:true}); localStorage.setItem('lessfomo_reminders', JSON.stringify(reminders)); renderReminders(); }
+        }
+        function checkRemindersLoop() {
+            setInterval(() => {
+                const now = new Date(), cur = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                reminders.forEach(r => { if (r.active && r.time === cur && now.getSeconds() === 0) alert(`⏰ PENGINGAT:\n${r.label}`); });
+            }, 1000);
+        }
+
+        /* ---------------- GAME 1: MINDFUL CATCH ---------------- */
+        let catchC, catchCtx, catchBasket, catchItems, catchInterval, catchScore = 0, catchLives = 5;
+        function initCatchCanvas() {
+            catchC = document.getElementById('catchCanvas');
+            if(!catchC) return;
+            catchCtx = catchC.getContext('2d');
+            catchC.width = catchC.parentElement.clientWidth - 40; catchC.height = 200;
+            catchBasket = { x: catchC.width/2 - 30, y: catchC.height - 18, w: 60, h: 10 };
+            catchC.addEventListener('mousemove', e => { catchBasket.x = Math.max(0, Math.min(catchC.width - catchBasket.w, e.clientX - catchC.getBoundingClientRect().left - catchBasket.w/2)); });
+            catchC.addEventListener('touchmove', e => { if(e.touches.length) catchBasket.x = Math.max(0, Math.min(catchC.width - catchBasket.w, e.touches[0].clientX - catchC.getBoundingClientRect().left - catchBasket.w/2)); });
+        }
+
+        function startCatchGame() {
+            initCatchCanvas();
+            catchScore = 0; catchLives = 5; catchItems = [];
+            updateCatchLivesUI();
+            if(catchInterval) clearInterval(catchInterval);
+            catchInterval = setInterval(updateCatchLoop, 1000/60);
+        }
+
+        function updateCatchLivesUI() {
+            document.getElementById('catchLives').innerText = "❤️".repeat(catchLives) + "🖤".repeat(5 - catchLives);
+            document.getElementById('catchScore').innerText = catchScore;
+        }
+
+        function updateCatchLoop() {
+            catchCtx.clearRect(0,0,catchC.width,catchC.height);
+            catchCtx.fillStyle = '#3b82f6';
+            catchCtx.fillRect(catchBasket.x, catchBasket.y, catchBasket.w, catchBasket.h);
+
+            if(Math.random() < 0.04) {
+                catchItems.push({ x: Math.random()*(catchC.width-20)+10, y: 0, type: Math.random() > 0.4 ? 'STAR' : 'MEDSOS', speed: 2 + Math.random()*2 });
+            }
+
+            for(let i = catchItems.length - 1; i >= 0; i--) {
+                let it = catchItems[i];
+                it.y += it.speed;
+                catchCtx.font = "16px sans-serif";
+                catchCtx.fillText(it.type === 'STAR' ? '⭐' : '📱', it.x - 8, it.y);
+
+                if(it.y >= catchBasket.y && it.x >= catchBasket.x && it.x <= catchBasket.x + catchBasket.w) {
+                    if(it.type === 'STAR') { catchScore += 10; }
+                    else { catchLives--; }
+                    updateCatchLivesUI();
+                    catchItems.splice(i,1);
+                    if(catchLives <= 0) {
+                        clearInterval(catchInterval);
+                        alert("Game Over! Kamu terlalu banyak menyentuh Medsos 📱");
+                    }
+                } else if(it.y > catchC.height) catchItems.splice(i,1);
+            }
+        }
+
+        /* ---------------- GAME 2: ANTI-FOMO RUNNER ---------------- */
+        let runC, runCtx, player, obstacles, runnerInterval, runnerScore = 0, runnerLives = 5;
+        const obTypes = ['📱','🛍️','🍔','👗','💎'];
+
+        function initRunnerCanvas() {
+            runC = document.getElementById('runnerCanvas');
+            if(!runC) return;
+            runCtx = runC.getContext('2d');
+            runC.width = runC.parentElement.clientWidth - 40; runC.height = 200;
+            player = { x: 30, y: runC.height - 40, w: 24, h: 32, vy: 0, jumping: false };
+            window.addEventListener('keydown', e => { if(e.code === 'Space') jumpPlayer(); });
+            runC.addEventListener('touchstart', jumpPlayer);
+        }
+
+        function jumpPlayer() {
+            if(!player.jumping) { player.vy = -11; player.jumping = true; }
+        }
+
+        function startRunnerGame() {
+            initRunnerCanvas();
+            runnerScore = 0; runnerLives = 5; obstacles = [];
+            updateRunnerLivesUI();
+            if(runnerInterval) clearInterval(runnerInterval);
+            runnerInterval = setInterval(updateRunnerLoop, 1000/60);
+        }
+
+        function updateRunnerLivesUI() {
+            document.getElementById('runnerLives').innerText = "❤️".repeat(runnerLives) + "🖤".repeat(5 - runnerLives);
+            document.getElementById('runnerScore').innerText = runnerScore;
+        }
+
+        function updateRunnerLoop() {
+            runCtx.clearRect(0,0,runC.width,runC.height);
+
+            runCtx.strokeStyle = '#cbd5e1';
+            runCtx.beginPath(); runCtx.moveTo(0, runC.height - 10); runCtx.lineTo(runC.width, runC.height - 10); runCtx.stroke();
+
+            player.y += player.vy;
+            player.vy += 0.6;
+            if(player.y >= runC.height - 42) { player.y = runC.height - 42; player.jumping = false; }
+
+            runCtx.font = "26px sans-serif";
+            runCtx.fillText("🏃", player.x, player.y + 24);
+
+            if(Math.random() < 0.02 && (obstacles.length === 0 || obstacles[obstacles.length-1].x < runC.width - 120)) {
+                obstacles.push({ x: runC.width, y: runC.height - 35, icon: obTypes[Math.floor(Math.random()*obTypes.length)] });
+            }
+
+            for(let i = obstacles.length - 1; i >= 0; i--) {
+                let ob = obstacles[i];
+                ob.x -= 3.5;
+                runCtx.fillText(ob.icon, ob.x, ob.y + 20);
+
+                if(Math.abs(ob.x - player.x) < 20 && Math.abs(ob.y - player.y) < 20) {
+                    runnerLives--;
+                    updateRunnerLivesUI();
+                    obstacles.splice(i,1);
+                    if(runnerLives <= 0) {
+                        clearInterval(runnerInterval);
+                        alert("Game Over! Kamu menabrak barang-barang pemicu FOMO 🛍️");
+                    }
+                } else if(ob.x < -20) {
+                    runnerScore += 5;
+                    updateRunnerLivesUI();
+                    obstacles.splice(i,1);
+                }
+            }
+        }
+
+        /* ---------------- WEB AUDIO AMBIENT ---------------- */
+        let actx, activeAudios = [];
+        function playAudio(type) {
+            stopAudio();
+            actx = new (window.AudioContext || window.webkitAudioContext)();
+            document.querySelectorAll('.sound-btn').forEach(b=>b.classList.remove('active'));
+            const btn = document.getElementById(`s-${type}`);
+            if(btn) btn.classList.add('active');
+
+            if(type === 'waves' || type === 'wind') {
+                const buf = actx.createBuffer(1, actx.sampleRate*2, actx.sampleRate);
+                const d = buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+                const src = actx.createBufferSource(); src.buffer = buf; src.loop = true;
+                const flt = actx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = type==='waves'?300:600;
+                const g = actx.createGain(); g.gain.value = 0.1;
+                src.connect(flt); flt.connect(g); g.connect(actx.destination); src.start();
+                activeAudios.push(src);
+            } else if(type==='birds'||type==='crickets') {
+                const timer = setInterval(() => {
+                    if(!actx) return;
+                    const osc = actx.createOscillator(), g = actx.createGain(), now = actx.currentTime;
+                    osc.type = 'sine';
+                    if(type==='birds') {
+                        osc.frequency.setValueAtTime(2000+Math.random()*1000, now);
+                        osc.frequency.exponentialRampToValueAtTime(3000, now+0.1);
+                    } else {
+                        osc.frequency.setValueAtTime(4500, now);
+                    }
+                    g.gain.setValueAtTime(0.05, now); g.gain.linearRampToValueAtTime(0.001, now+0.08);
+                    osc.connect(g); g.connect(actx.destination); osc.start(now); osc.stop(now+0.08);
+                }, type==='birds'?1000:200);
+                activeAudios.push({ stop:()=>clearInterval(timer) });
+            } else if(type==='egypt'||type==='bell') {
+                const freqs = type==='egypt' ? [220, 233, 277, 293, 329, 349] : [432, 528];
+                const timer = setInterval(() => {
+                    if(!actx) return;
+                    const osc = actx.createOscillator(), g = actx.createGain(), now = actx.currentTime;
+                    osc.frequency.value = freqs[Math.floor(Math.random()*freqs.length)];
+                    g.gain.setValueAtTime(0.08, now); g.gain.exponentialRampToValueAtTime(0.001, now+1.2);
+                    osc.connect(g); g.connect(actx.destination); osc.start(now); osc.stop(now+1.2);
+                }, type==='egypt'?800:3000);
+                activeAudios.push({ stop:()=>clearInterval(timer) });
+            }
+        }
+
+        function stopAudio() {
+            activeAudios.forEach(a => { try{ a.stop(); }catch(e){} });
+            activeAudios = [];
+            if(actx) { actx.close(); actx = null; }
+            document.querySelectorAll('.sound-btn').forEach(b=>b.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>
